@@ -1,0 +1,230 @@
+@import url('https://fonts.googleapis.com/css2?family=Send+Flowers&family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap');
+
+:root{
+  /* Spring / wisteria / gardenia palette */
+  --bg:#FBF8F4;
+  --bg-alt:#F3EEE6;
+  --ink:#362F3D;
+  --muted:#7A7186;
+  --wisteria:#8974A8;
+  --wisteria-deep:#6B5588;
+  --sage:#6E8568;
+  --dusty-rose:#A6685C;
+  --line:#E4DCE8;
+  --white:#FFFFFF;
+
+  --font-script:'Send Flowers', cursive;
+  --font-serif:'Cormorant Garamond', Georgia, serif;
+  --font-body:'Jost', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+*{ box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family:var(--font-body);
+  background:var(--bg);
+  color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+  line-height:1.6;
+}
+
+h1,h2,h3{ font-family:var(--font-serif); font-weight:600; color:var(--ink); margin:0 0 0.5em; }
+a{ color:var(--wisteria-deep); }
+a:hover{ color:var(--wisteria); }
+
+/* ── SITE HEADER ── */
+.site-header{
+  background:var(--white);
+  border-bottom:1px solid var(--line);
+  padding:1.75rem 1.5rem 0;
+}
+.site-header .inner{
+  max-width:1080px;
+  margin:0 auto;
+}
+.site-title{
+  font-family:var(--font-script);
+  font-size:2.6rem;
+  font-weight:400;
+  color:var(--wisteria-deep);
+  margin:0;
+  line-height:1;
+}
+.site-tagline{
+  font-family:var(--font-body);
+  font-size:0.92rem;
+  color:var(--muted);
+  margin:0.4rem 0 1.4rem;
+  letter-spacing:0.01em;
+}
+
+/* ── TAB NAV ── */
+.tab-nav{
+  display:flex;
+  gap:0.3rem;
+  flex-wrap:wrap;
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.tab-nav button{
+  font-family:var(--font-serif);
+  font-size:1rem;
+  font-weight:600;
+  letter-spacing:0.01em;
+  background:none;
+  border:none;
+  border-bottom:3px solid transparent;
+  color:var(--muted);
+  padding:0.7rem 1.1rem;
+  cursor:pointer;
+  transition:color .15s, border-color .15s;
+}
+.tab-nav button:hover{ color:var(--wisteria-deep); }
+.tab-nav button.active{
+  color:var(--wisteria-deep);
+  border-bottom-color:var(--wisteria);
+}
+.tab-nav button:focus-visible{
+  outline:2px solid var(--wisteria);
+  outline-offset:2px;
+}
+
+/* ── TAB PANELS ── */
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+.tab-panel-inner{
+  max-width:880px;
+  margin:0 auto;
+  padding:2.5rem 1.5rem 4rem;
+}
+.tab-panel-inner.wide{ max-width:1080px; }
+.tab-panel-inner.full{ max-width:none; padding:0; }
+
+/* ── PROSE (Teaching Statement) ── */
+.prose h1{ font-size:2rem; margin-bottom:0.2em; }
+.prose .prose-byline{
+  font-family:var(--font-body);
+  color:var(--muted);
+  font-size:0.85rem;
+  text-transform:uppercase;
+  letter-spacing:0.1em;
+  margin-bottom:2rem;
+}
+.prose p{
+  font-size:1.05rem;
+  margin:0 0 1.3em;
+  color:var(--ink);
+}
+.prose .coming-soon{
+  font-style:italic;
+  color:var(--muted);
+  border-left:3px solid var(--wisteria);
+  padding:0.6rem 0 0.6rem 1rem;
+  background:var(--bg-alt);
+  border-radius:0 4px 4px 0;
+}
+
+/* ── SYLLABUS ── */
+.syllabus h1{ font-size:1.9rem; margin-bottom:0.1em; }
+.syllabus .syllabus-sub{
+  color:var(--muted);
+  font-size:0.95rem;
+  margin-bottom:2rem;
+}
+.syllabus section{ margin-bottom:2.4rem; }
+.syllabus h2{
+  font-size:1.35rem;
+  border-bottom:2px solid var(--line);
+  padding-bottom:0.4rem;
+  margin-bottom:0.9rem;
+}
+.syllabus h3{ font-size:1.05rem; margin-bottom:0.4rem; color:var(--wisteria-deep); }
+.syllabus p{ margin:0 0 1em; }
+.syllabus ul{ margin:0 0 1em; padding-left:1.3em; }
+.syllabus li{ margin-bottom:0.35em; }
+.syllabus .policy-quote{
+  background:var(--bg-alt);
+  border-left:3px solid var(--wisteria);
+  padding:0.9rem 1.1rem;
+  border-radius:0 4px 4px 0;
+  font-style:italic;
+  margin:0 0 1em;
+}
+
+.syllabus table{
+  width:100%;
+  border-collapse:collapse;
+  font-size:0.92rem;
+  margin-bottom:0.5rem;
+}
+.syllabus table caption{
+  text-align:left;
+  font-family:var(--font-serif);
+  font-weight:600;
+  font-size:1.05rem;
+  margin-bottom:0.5rem;
+  color:var(--ink);
+}
+.syllabus th, .syllabus td{
+  text-align:left;
+  padding:0.55rem 0.7rem;
+  border-bottom:1px solid var(--line);
+  vertical-align:top;
+}
+.syllabus th{
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:0.78rem;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  color:var(--muted);
+  background:var(--bg-alt);
+}
+.syllabus tr:last-child td{ border-bottom:none; }
+.syllabus .grading-table{ max-width:520px; }
+.syllabus .week-col{ white-space:nowrap; font-weight:600; color:var(--wisteria-deep); }
+
+@media (max-width:640px){
+  .syllabus table, .syllabus thead, .syllabus tbody, .syllabus th, .syllabus td, .syllabus tr{ display:block; }
+  .syllabus thead{ display:none; }
+  .syllabus tr{ border-bottom:2px solid var(--line); padding:0.6rem 0; }
+  .syllabus td{ border-bottom:none; padding:0.2rem 0; }
+  .syllabus td::before{
+    content:attr(data-label);
+    display:block;
+    font-size:0.7rem;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--muted);
+  }
+}
+
+/* ── EMBEDDED APP FRAMES (Hotel Negotiator / Ethics Simulator) ── */
+.app-frame-wrap{
+  padding:0;
+}
+.app-frame{
+  display:block;
+  width:100%;
+  height:calc(100vh - 158px);
+  min-height:600px;
+  border:none;
+  background:var(--white);
+}
+
+/* ── FOOTER ── */
+.site-footer{
+  text-align:center;
+  color:var(--muted);
+  font-size:0.8rem;
+  padding:2rem 1rem;
+  border-top:1px solid var(--line);
+}
+
+@media (max-width:640px){
+  .site-title{ font-size:2.1rem; }
+  .tab-nav button{ padding:0.6rem 0.8rem; font-size:0.92rem; }
+  .tab-panel-inner{ padding:1.8rem 1.1rem 3rem; }
+}

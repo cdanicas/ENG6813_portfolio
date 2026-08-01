@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>It's Your Call Now — Board Leadership Scenarios</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@300;400;500;600&display=swap');
+  :root{
+    /* Spring / wisteria / gardenia palette (shared site-wide) */
+    --white:#ffffff;
+    --black:#362F3D;          /* soft plum-charcoal, was Dark Heather Grey */
+    --red:#A6685C;            /* dusty rose, was Torch Red */
+    --navy:#8974A8;           /* wisteria, was Hermes Blue */
+    --navy2:#6B5588;          /* wisteria deep, was Hermes Blue dark */
+    --green:#6E8568;          /* sage, was Average Green */
+    --gold:#6E8568;           /* accent / complete state -> sage */
+    --gold-bright:#84A17C;    /* brighter sage */
+    --ink:#362F3D;            /* soft plum-charcoal */
+    --muted:#7A7186;          /* muted mauve-gray */
+    --line:#E4DCE8;           /* soft lavender-gray */
+    --bg:#FBF8F4;             /* gardenia cream */
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{height:100%;}
+  body{
+    font-family:'Jost',-apple-system,'Helvetica Neue',Arial,sans-serif;
+    background:var(--bg);
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-weight:600;
+    letter-spacing:-0.01em;
+  }
+  button{font-family:inherit;cursor:pointer;}
+
+  /* ── TOP BAR ── */
+  .topbar{
+    background:var(--navy);
+    color:#fff;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0.7rem 1.5rem;
+    border-bottom:4px solid var(--red);
+  }
+  .topbar .brand{
+    display:flex;align-items:center;gap:0.6rem;
+    font-family:'Cormorant Garamond',serif;font-weight:600;
+    text-transform:uppercase;letter-spacing:0.08em;font-size:0.9rem;
+  }
+  .topbar .brand .dot{width:14px;height:14px;border-radius:50%;
+    background:conic-gradient(var(--gold) 0 25%,#fff 0 50%,var(--red) 0 75%,var(--navy2) 0);
+    border:2px solid #fff;}
+  .topbar .crumbs{font-size:0.78rem;color:#d8cfe4;text-transform:uppercase;letter-spacing:0.05em;}
+
+  /* ── VIEW CONTAINER ── */
+  .view{display:none;}
+  .view.active{display:block;}
+  .wrap{max-width:1080px;margin:0 auto;padding:1.5rem;}
+
+  /* ── LANDING ── */
+  .hero{
+    background:
+      linear-gradient(135deg, rgba(137,116,168,0.97), rgba(107,85,136,0.97)),
+      repeating-linear-gradient(45deg, transparent 0 28px, rgba(255,255,255,0.02) 28px 56px);
+    color:#fff;
+    text-align:center;
+    padding:3rem 1.5rem 2.4rem;
+    border-bottom:6px solid var(--gold);
+  }
+  .hero .kicker{
+    display:inline-block;
+    background:var(--red);color:#fff;
+    font-family:'Jost',sans-serif;font-weight:600;
+    text-transform:uppercase;letter-spacing:0.15em;font-size:0.7rem;
+    padding:0.35rem 0.9rem;border-radius:2px;margin-bottom:1.1rem;
+  }
+  .hero h1{
+    font-size:2.5rem;line-height:1.02;text-transform:uppercase;
+    max-width:760px;margin:0 auto;
+  }
+  .hero h1 .em{color:var(--gold-bright);}
+  .hero p.sub{
+    color:#ddd3ea;margin-top:1rem;font-size:1.02rem;max-width:560px;margin-left:auto;margin-right:auto;
+  }
+  .name-field{
+    margin:1.6rem auto 0;max-width:420px;
+    display:flex;gap:0.5rem;
+  }
+  .name-field input{
+    flex:1;padding:0.75rem 1rem;border:none;border-radius:3px;
+    font-size:1rem;font-family:inherit;
+  }
+  .name-field input:focus{outline:3px solid var(--gold);}
+
+  .section-label{
+    text-align:center;text-transform:uppercase;letter-spacing:0.18em;
+    color:var(--muted);font-size:0.78rem;font-family:'Jost',sans-serif;font-weight:600;
+    margin:2.2rem 0 1.2rem;
+  }
+
+  .role-grid{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;
+  }
+  .role-card{
+    background:#fff;border:2px solid var(--line);border-radius:8px;
+    overflow:hidden;cursor:pointer;text-align:center;
+    transition:transform .15s, box-shadow .15s, border-color .15s;
+    display:flex;flex-direction:column;
+  }
+  .role-card:hover{transform:translateY(-5px);border-color:var(--navy);
+    box-shadow:0 12px 26px rgba(137,116,168,0.18);}
+  .role-card .art{
+    background:var(--navy);padding:1.2rem;display:flex;align-items:center;justify-content:center;
+    border-bottom:4px solid var(--red);
+  }
+  .role-card .art svg{width:78px;height:78px;display:block;}
+  .role-card .label{
+    padding:0.9rem 0.5rem 1.1rem;
+    font-family:'Cormorant Garamond',serif;font-weight:600;text-transform:uppercase;
+    font-size:1.05rem;letter-spacing:0.02em;color:var(--navy);line-height:1.1;
+  }
+  .role-card .go{
+    margin-top:auto;background:var(--gold);color:#fff;
+    font-family:'Jost',sans-serif;font-weight:600;font-size:0.66rem;text-transform:uppercase;
+    letter-spacing:0.12em;padding:0.45rem;border-top:1px solid rgba(0,0,0,0.06);
+  }
+  .hint{text-align:center;color:var(--muted);font-size:0.82rem;margin-top:1.4rem;}
+
+  /* ── SCENARIO PAGE ── */
+  .scen-header{
+    background:#fff;border-bottom:2px solid var(--line);
+  }
+  .scen-header .inner{
+    max-width:1080px;margin:0 auto;padding:1.1rem 1.5rem;
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  }
+  .scen-header .role-id{display:flex;align-items:center;gap:0.85rem;}
+  .scen-header .role-id .badge-art{
+    width:54px;height:54px;background:var(--navy);border-radius:6px;
+    display:flex;align-items:center;justify-content:center;border-bottom:3px solid var(--red);
+  }
+  .scen-header .role-id .badge-art svg{width:34px;height:34px;}
+  .scen-header .role-id .meta .r{
+    font-family:'Cormorant Garamond',serif;font-weight:600;text-transform:uppercase;
+    font-size:1.15rem;color:var(--navy);line-height:1;
+  }
+  .scen-header .role-id .meta .who{font-size:0.82rem;color:var(--muted);margin-top:0.2rem;}
+  .btn-back{
+    background:none;border:2px solid var(--line);border-radius:4px;
+    padding:0.45rem 0.9rem;color:var(--muted);font-size:0.8rem;font-weight:bold;
+    text-transform:uppercase;letter-spacing:0.05em;
+  }
+  .btn-back:hover{border-color:var(--navy);color:var(--navy);}
+
+  /* ── PROGRESS TRACKER (penalty shootout) ── */
+  .shootout{
+    background:var(--navy2);
+    padding:0.9rem 1.5rem;
+  }
+  .shootout .inner{
+    max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:1.3rem;flex-wrap:wrap;
+  }
+  .shootout .so-label{
+    color:#d8cfe4;text-transform:uppercase;letter-spacing:0.12em;
+    font-size:0.66rem;font-family:'Jost',sans-serif;font-weight:600;
+  }
+  .lights{display:flex;gap:1.4rem;flex-wrap:wrap;}
+  .light{display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
+  .light .bulb{
+    width:26px;height:26px;border-radius:50%;
+    background:rgba(255,255,255,0.12);
+    border:2px solid rgba(255,255,255,0.35);
+    transition:all .25s;position:relative;
+  }
+  .light.done .bulb{
+    background:radial-gradient(circle at 35% 30%, var(--gold-bright), var(--gold));
+    border-color:#fff;
+    box-shadow:0 0 0 3px rgba(110,133,104,0.35), 0 0 14px rgba(132,161,124,0.7);
+  }
+  .light.done .bulb::after{
+    content:'';position:absolute;inset:0;margin:auto;width:8px;height:13px;
+    border:solid var(--navy);border-width:0 3px 3px 0;transform:rotate(45deg) translate(-1px,-2px);
+  }
+  .light .cap{
+    color:#d8cfe4;font-size:0.64rem;text-transform:uppercase;letter-spacing:0.04em;text-align:center;
+  }
+  .light.done .cap{color:var(--gold-bright);}
+
+  /* ── TABS ── */
+  .tabs{
+    max-width:1080px;margin:1.4rem auto 0;padding:0 1.5rem;
+    display:flex;gap:0.4rem;flex-wrap:wrap;
+  }
+  .tab{
+    background:#fff;border:2px solid var(--line);border-bottom:none;
+    border-radius:8px 8px 0 0;
+    padding:0.7rem 1.2rem;
+    font-family:'Jost',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;
+    font-size:0.82rem;color:var(--muted);position:relative;top:2px;
+  }
+  .tab.active{color:var(--navy);border-color:var(--navy);background:#fff;border-bottom:3px solid #fff;}
+  .tab .tdot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--line);margin-right:0.45rem;}
+  .tab.filled .tdot{background:var(--gold);box-shadow:0 0 0 2px rgba(110,133,104,0.3);}
+
+  .panel-wrap{
+    max-width:1080px;margin:0 auto 2rem;padding:0 1.5rem;
+  }
+  .panel{
+    background:#fff;border:2px solid var(--navy);border-radius:0 10px 10px 10px;
+    padding:1.8rem;
+  }
+  .panel .tagline{
+    display:inline-block;background:var(--navy);color:#fff;
+    font-family:'Jost',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;
+    font-size:0.66rem;padding:0.3rem 0.7rem;border-radius:2px;margin-bottom:1.1rem;
+  }
+  .situation{
+    font-size:1.06rem;line-height:1.75;color:var(--ink);
+    border-left:5px solid var(--red);padding:0.2rem 0 0.2rem 1.2rem;margin-bottom:1.5rem;
+  }
+  .question{
+    font-family:'Jost',sans-serif;font-weight:600;color:var(--navy);
+    font-size:1.05rem;line-height:1.4;margin-bottom:0.8rem;
+  }
+  textarea{
+    width:100%;min-height:200px;resize:vertical;
+    border:2px solid var(--line);border-radius:6px;padding:1rem 1.1rem;
+    font-size:1rem;font-family:inherit;line-height:1.6;color:var(--ink);
+  }
+  textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(110,133,104,0.2);}
+
+  .panel-actions{
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    margin-top:1.2rem;flex-wrap:wrap;
+  }
+  .saved-note{font-size:0.82rem;color:var(--muted);}
+  .saved-note.on{color:#4f6349;font-weight:bold;}
+  .btn{
+    border:none;border-radius:5px;padding:0.7rem 1.4rem;
+    font-family:'Jost',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;
+    font-size:0.82rem;
+  }
+  .btn-primary{background:var(--red);color:#fff;}
+  .btn-primary:hover{background:#8b4f44;}
+  .btn-primary:disabled{background:#c9c2ce;color:#fff;cursor:not-allowed;}
+  .btn-nav{background:var(--navy);color:#fff;}
+  .btn-nav:hover{background:var(--navy2);}
+  .btn-gold{background:var(--gold);color:var(--navy);}
+  .btn-gold:hover{background:var(--gold-bright);}
+  .btn-ghost{background:#fff;border:2px solid var(--line);color:var(--muted);}
+  .btn-ghost:hover{border-color:var(--navy);color:var(--navy);}
+
+  .nav-row{
+    display:flex;justify-content:space-between;gap:1rem;margin-top:1.3rem;flex-wrap:wrap;
+  }
+
+  /* ── SUMMARY ── */
+  .summary-doc{
+    background:#fff;border:2px solid var(--line);border-radius:10px;
+    padding:2.2rem;margin-top:0.5rem;
+  }
+  .summary-doc .doc-head{
+    border-bottom:4px solid var(--navy);padding-bottom:1.2rem;margin-bottom:1.6rem;
+    display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;flex-wrap:wrap;
+  }
+  .summary-doc .doc-head .t{
+    font-family:'Cormorant Garamond',serif;font-weight:600;text-transform:uppercase;color:var(--navy);font-size:1.7rem;line-height:1;
+  }
+  .summary-doc .doc-head .sub{color:var(--muted);font-size:0.85rem;margin-top:0.5rem;}
+  .summary-doc .doc-head .sub b{color:var(--red);}
+  .summary-doc .doc-head .ball{
+    width:46px;height:46px;border-radius:50%;flex:none;
+    background:conic-gradient(var(--gold) 0 25%,#fff 0 50%,var(--red) 0 75%,var(--navy) 0);
+    border:3px solid var(--navy);
+  }
+  .qa{margin-bottom:1.7rem;}
+  .qa .q{
+    font-family:'Jost',sans-serif;font-weight:600;color:var(--navy);font-size:1rem;
+    line-height:1.4;margin-bottom:0.55rem;
+    padding-left:0.9rem;border-left:5px solid var(--gold);
+  }
+  .qa .a{
+    font-size:1rem;line-height:1.7;color:var(--ink);white-space:pre-wrap;
+    background:var(--bg);border-radius:6px;padding:1rem 1.1rem;
+  }
+  .qa .a.empty{color:var(--muted);font-style:italic;}
+  .summary-tools{
+    display:flex;gap:0.7rem;flex-wrap:wrap;margin:1.4rem 0 0.4rem;
+  }
+
+  /* ── FOOTER ── */
+  footer{
+    text-align:center;color:var(--muted);font-size:0.74rem;
+    padding:1.6rem 1rem;border-top:1px solid var(--line);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width:880px){
+    .role-grid{grid-template-columns:repeat(2,1fr);}
+    .hero h1{font-size:1.9rem;}
+  }
+  @media (max-width:540px){
+    .role-grid{grid-template-columns:1fr;}
+    .lights{gap:1rem;}
+  }
+
+  /* ── PRINT ── */
+  @media print{
+    .topbar,.scen-header,.shootout,.tabs,.summary-tools,.btn-back,footer,.no-print{display:none !important;}
+    body{background:#fff;}
+    .summary-doc{border:none;padding:0;}
+    .view{display:none !important;}
+    #view-summary{display:block !important;}
+    .wrap{padding:0;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><span class="dot"></span> It's Your Call Now</div>
+  <div class="crumbs" id="crumbs">Board Leadership Scenarios</div>
+</div>
+
+<!-- ════════ LANDING ════════ -->
+<section id="view-landing" class="view active">
+  <div class="hero">
+    <span class="kicker">Board Leadership</span>
+    <h1>Welcome to Leadership <span class="em">— It's Your Call Now.</span><br>What Would You Do?</h1>
+    <p class="sub">Choose your elected role, work through two real-world dilemmas and a quick role check-in, then bring your summary to your peer group.</p>
+    <div class="name-field">
+      <input id="student-name" type="text" placeholder="Enter your name to begin" autocomplete="name" />
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="section-label">Select Your Role</div>
+    <div class="role-grid" id="role-grid"></div>
+    <p class="hint">Five roles. Your responses stay in this browser session only — save or print your summary before you close the tab.</p>
+  </div>
+</section>
+
+<!-- ════════ SCENARIO ════════ -->
+<section id="view-scenario" class="view">
+  <div class="scen-header">
+    <div class="inner">
+      <div class="role-id">
+        <div class="badge-art" id="scen-art"></div>
+        <div class="meta">
+          <div class="r" id="scen-role">Role</div>
+          <div class="who" id="scen-who"></div>
+        </div>
+      </div>
+      <button class="btn-back" onclick="goLanding()">Change Role</button>
+    </div>
+  </div>
+
+  <div class="shootout">
+    <div class="inner">
+      <span class="so-label">Progress</span>
+      <div class="lights" id="lights"></div>
+    </div>
+  </div>
+
+  <div class="tabs" id="tabs"></div>
+  <div class="panel-wrap">
+    <div class="panel" id="panel"></div>
+  </div>
+</section>
+
+<!-- ════════ SUMMARY ════════ -->
+<section id="view-summary" class="view">
+  <div class="wrap">
+    <div class="no-print" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.6rem;flex-wrap:wrap;gap:0.6rem;">
+      <button class="btn-back" onclick="backToScenario()">Back to Scenarios</button>
+      <button class="btn-back" onclick="goLanding()">Change Role</button>
+    </div>
+    <div class="summary-doc" id="summary-doc"></div>
+    <div class="summary-tools no-print">
+      <button class="btn btn-navy btn-nav" onclick="window.print()">Print / Save as PDF</button>
+      <button class="btn btn-gold" onclick="downloadText()">Download as Text</button>
+      <span style="align-self:center;color:var(--muted);font-size:0.8rem;">Tip: you can also take a screenshot for your records.</span>
+    </div>
+  </div>
+</section>
+
+<footer id="page-footer">A scenario tool for board leadership in professional organizations.</footer>
+
+<script>
+/* ───────── ROLE ART (monochromatic abstract SVG) ───────── */
+const ART = {
+  president: `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="14" y="40" width="36" height="8" rx="2" fill="#6E8568"/>
+    <rect x="26" y="20" width="12" height="22" fill="#fff"/>
+    <path d="M20 20 H44 L40 28 H24 Z" fill="#A6685C"/>
+    <circle cx="32" cy="14" r="6" fill="#fff" stroke="#6E8568" stroke-width="2"/>
+  </svg>`,
+  "vice-president": `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="25" cy="32" r="15" fill="none" stroke="#fff" stroke-width="4"/>
+    <circle cx="39" cy="32" r="15" fill="none" stroke="#6E8568" stroke-width="4"/>
+    <path d="M32 21 a15 15 0 0 1 0 22 a15 15 0 0 1 0 -22" fill="#A6685C" opacity="0.85"/>
+  </svg>`,
+  "communications-chair": `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="22" cy="34" r="7" fill="#6E8568"/>
+    <path d="M33 22 a16 16 0 0 1 0 24" stroke="#fff" stroke-width="4" fill="none"/>
+    <path d="M40 16 a26 26 0 0 1 0 36" stroke="#A6685C" stroke-width="4" fill="none"/>
+    <path d="M47 10 a36 36 0 0 1 0 48" stroke="#fff" stroke-width="3" fill="none" opacity="0.6"/>
+  </svg>`,
+  "events-chair": `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 46 L32 16 L54 46 Z" fill="none" stroke="#fff" stroke-width="4"/>
+    <path d="M22 46 L32 32 L42 46 Z" fill="#A6685C"/>
+    <rect x="12" y="46" width="40" height="6" rx="2" fill="#6E8568"/>
+    <circle cx="32" cy="13" r="3" fill="#6E8568"/>
+  </svg>`,
+  "legislative-chair": `<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M16 30 a16 16 0 0 1 32 0 Z" fill="#A6685C"/>
+    <rect x="14" y="30" width="36" height="6" fill="#6E8568"/>
+    <rect x="18" y="36" width="4" height="14" fill="#fff"/>
+    <rect x="30" y="36" width="4" height="14" fill="#fff"/>
+    <rect x="42" y="36" width="4" height="14" fill="#fff"/>
+    <rect x="12" y="50" width="40" height="5" rx="1" fill="#fff"/>
+    <circle cx="32" cy="12" r="3" fill="#6E8568"/>
+  </svg>`
+};
+
+/* ───────── DATA ───────── */
+const CHECKIN_Q = "What do you like about your role so far? What would you change? What challenges are you facing?";
+const SCEN_Q = "What ethical concerns, if any, does this situation raise for you? Evaluate what is at stake and describe what you would do next.";
+
+const ROLES = [
+  {
+    id:"president", name:"President", who:"Elected Board President",
+    s1:"A staff member issued an official statement misrepresenting the association's position on a recent legal ruling, a position that does not reflect either the board's actual stance or the views of more than half the membership. Members are upset, and several have reached out directly to you for an explanation. Rather than naming the staff member's error publicly, you are inclined to take responsibility yourself, reasoning that as President, you should have reviewed the statement before it went out. Taking the blame would let you avoid a difficult conversation about how the error happened in the first place, and you are not entirely sure it would not happen again.",
+    s2:"At a conference, another association President mentions to you what an outstanding job your Vice President is doing managing your organization's events, clearly under the impression the VP is the one running them. Later that evening, you overhear the VP at a dinner, taking personal credit for the success of the last event in front of several other attendees. You are not sure whether your Events Chair, who actually managed the event, is even aware this is happening."
+  },
+  {
+    id:"vice-president", name:"Vice President", who:"Elected Board Vice President",
+    s1:"You are the Vice President of the Florida League of Cities and also serve as Mayor of the City of Orlando. The President is considering proposing an increase to annual membership dues but is unsure how member cities will respond. Rather than raising it through a properly noticed meeting, the President asks you to informally talk with one of your City Commissioners to gauge their reaction, even though under Florida's Sunshine Law, any matter requiring a future commission vote, including a dues increase, cannot be discussed privately between officials outside of a publicly noticed meeting.",
+    s2:"At a private meeting with the President they tell you the Events Chair's work is falling short of expectations, specifically vendor payments have been late, some events are running over budget, and communication with key sponsors has been sparse. The President feels if they address the issues with the Events Chair directly things might become awkward, especially with the next major event only a few weeks away. Instead, the President asks you to quietly take over several of the Events Chair's key tasks like vendor calls and budget tracking for the rest of the fiscal year. The Events Chair will not be told this is happening because of a performance concern; if asked, you are just helping out while things are busy."
+  },
+  {
+    id:"communications-chair", name:"Communications Chair", who:"Elected Communications Chair",
+    s1:"Your organization recently completed a significant project that will be featured in your industry magazine. A competing association assisted with the project at a critical tipping point. Although their contribution was small, it made a real difference in the outcome. While you are drafting the notes for the formal press release, you feel the right thing to do is acknowledge the other organization's contributions and rise together. The incoming President, someone you will work closely with going forward, has suggested they would prefer the announcement focus only on your organization's accomplishments because sharing the credit may open the door to the other organization requesting you share any potential future grant funding as well.",
+    s2:"While drafting the association's legislative priorities material with the Legislative Chair, you notice the lead compelling statistic for your number 2 item comes from a source that has not been independently verified. As the Communications Chair, your code of ethics prohibits publishing unverified or uncredited sources. However, the Legislative Chair's code of ethics, which is focused on lobbying conduct, does not address sourcing standards at all. You realize if the Legislative Chair submits the material instead of you, it may not technically violate either code. The final version of the priorities is due for board approval tomorrow morning."
+  },
+  {
+    id:"events-chair", name:"Events Chair", who:"Elected Events Chair",
+    s1:"While reviewing the final hotel bill from the last conference, you notice the hotel has overcharged the organization for several items. One of the concessions of your hotel contract included reward points for you, the Events Chair, based on every dollar spent by the association at the hotel, meaning the higher and incorrect charge will earn you more points than if the bill were accurate. No one else on the board reviews these bills line by line except you, and the hotel is unlikely to notice or revisit the charge unless you bring it to their attention.",
+    s2:"At a recent meeting, Vendor X, a Diamond Level sponsor for your upcoming summer gala, shows your team new beach chairs they have brought in for promotional giveaways. They suggest the gala would be the perfect opportunity to share their new product, and give you enough chairs for each of your board members because they had them on hand. Several of your board members are Form 1 filers with the State of Florida, meaning they are not permitted to accept gifts from vendors. But this is part of the sponsorship package, is it not?"
+  },
+  {
+    id:"legislative-chair", name:"Legislative Chair", who:"Elected Legislative Chair",
+    s1:"For an upcoming event, you reminded the Events Chair that state legislators can only accept meals valued under 25 dollars. One week before the event, at a planning meeting, you learn the meal will actually cost 35 dollars per person, the Events Chair forgot to flag the increase in advance. If you reach out now to let the legislative members know they will need to pay 10 dollars each to attend, you are worried some may back out rather than pay or deal with the hassle. If you say nothing, they will unknowingly be in violation of state gift law by attending.",
+    s2:"After months of meetings, one state legislator tells you they will co-sponsor a bill promoting your association's number 1 legislative priority, but only if you can persuade a second legislator to support a different, unrelated bill. That second bill, if it moves forward, would negatively affect your association's President professionally, a close personal friend. No one has asked you to keep this quiet, but you know that if you pursue it, it is possible the President might find out one day because people talk."
+  }
+];
+
+const TABS = [
+  {key:"s1",  label:"Scenario 1",   short:"Scenario 1"},
+  {key:"s2",  label:"Scenario 2",   short:"Scenario 2"},
+  {key:"ci",  label:"Role Check-In",short:"Check-In"},
+  {key:"sum", label:"Summary",      short:"Summary"}
+];
+
+/* ───────── STATE ───────── */
+const state = {
+  name:"",
+  roleId:null,
+  activeTab:"s1",
+  responses:{}      // { roleId: { s1, s2, ci } }
+};
+
+function roleById(id){ return ROLES.find(r=>r.id===id); }
+function resp(){ return state.responses[state.roleId] || (state.responses[state.roleId]={s1:"",s2:"",ci:""}); }
+function questionFor(tab){ return tab==="ci" ? CHECKIN_Q : SCEN_Q; }
+function situationFor(role,tab){ return tab==="s1" ? role.s1 : role.s2; }
+
+/* ───────── LANDING ───────── */
+function renderRoleGrid(){
+  const grid = document.getElementById('role-grid');
+  grid.innerHTML = ROLES.map(r=>`
+    <div class="role-card" onclick="selectRole('${r.id}')">
+      <div class="art">${ART[r.id]}</div>
+      <div class="label">${r.name}</div>
+      <div class="go">Start ▸</div>
+    </div>
+  `).join('');
+}
+
+function selectRole(id){
+  state.name = document.getElementById('student-name').value.trim();
+  state.roleId = id;
+  state.activeTab = "s1";
+  resp(); // ensure record exists
+  showView('scenario');
+  renderScenarioView();
+}
+
+/* ───────── SCENARIO VIEW ───────── */
+function renderScenarioView(){
+  const role = roleById(state.roleId);
+  document.getElementById('scen-art').innerHTML = ART[role.id];
+  document.getElementById('scen-role').textContent = role.name;
+  document.getElementById('scen-who').textContent = role.who;
+  document.getElementById('crumbs').textContent = role.name;
+  renderLights();
+  renderTabs();
+  renderPanel();
+}
+
+function isFilled(tabKey){
+  const r = resp();
+  if(tabKey==="s1") return r.s1.trim().length>0;
+  if(tabKey==="s2") return r.s2.trim().length>0;
+  if(tabKey==="ci") return r.ci.trim().length>0;
+  if(tabKey==="sum") return r.s1.trim() && r.s2.trim() && r.ci.trim();
+  return false;
+}
+
+function renderLights(){
+  const el = document.getElementById('lights');
+  el.innerHTML = TABS.map(t=>`
+    <div class="light ${isFilled(t.key)?'done':''}">
+      <div class="bulb"></div>
+      <div class="cap">${t.short}</div>
+    </div>
+  `).join('');
+}
+
+function renderTabs(){
+  const el = document.getElementById('tabs');
+  el.innerHTML = TABS.map(t=>{
+    const active = state.activeTab===t.key ? 'active':'';
+    const filled = isFilled(t.key) ? 'filled':'';
+    return `<button class="tab ${active} ${filled}" onclick="switchTab('${t.key}')">
+      <span class="tdot"></span>${t.label}</button>`;
+  }).join('');
+}
+
+function switchTab(key){
+  // persist current textarea before switching
+  persistCurrent();
+  if(key==="sum"){ openSummary(); return; }
+  state.activeTab = key;
+  renderTabs();
+  renderPanel();
+}
+
+function persistCurrent(){
+  const ta = document.getElementById('answer');
+  if(ta && (state.activeTab==="s1"||state.activeTab==="s2"||state.activeTab==="ci")){
+    resp()[state.activeTab] = ta.value;
+  }
+}
+
+function renderPanel(){
+  const role = roleById(state.roleId);
+  const tab = state.activeTab;
+  const q = questionFor(tab);
+  const val = resp()[tab] || "";
+  const panel = document.getElementById('panel');
+
+  const situationBlock = (tab==="ci") ? `
+    <span class="tagline">Role Check-In</span>
+    <div class="situation">Take a moment to reflect on how your term is going before you discuss it with your peer group.</div>
+  ` : `
+    <span class="tagline">${tab==="s1"?"Scenario 1":"Scenario 2"}</span>
+    <div class="situation">${situationFor(role,tab)}</div>
+  `;
+
+  const tabIndex = TABS.findIndex(t=>t.key===tab);
+  const prevTab = tabIndex>0 ? TABS[tabIndex-1] : null;
+  const nextTab = TABS[tabIndex+1];
+
+  panel.innerHTML = `
+    ${situationBlock}
+    <div class="question">${q}</div>
+    <textarea id="answer" placeholder="Type your response here..."
+      oninput="onAnswerInput()">${escapeHtml(val)}</textarea>
+    <div class="panel-actions">
+      <span class="saved-note ${val.trim()?'on':''}" id="saved-note">
+        ${val.trim()?'✓ Saved for this session':'Your response saves automatically as you type'}
+      </span>
+    </div>
+    <div class="nav-row">
+      <div>${prevTab?`<button class="btn btn-ghost" onclick="switchTab('${prevTab.key}')">◂ ${prevTab.label}</button>`:''}</div>
+      <div>${nextTab?`<button class="btn btn-nav" onclick="switchTab('${nextTab.key}')">${nextTab.label} ▸</button>`:''}</div>
+    </div>
+  `;
+}
+
+function onAnswerInput(){
+  const ta = document.getElementById('answer');
+  resp()[state.activeTab] = ta.value;
+  const note = document.getElementById('saved-note');
+  if(ta.value.trim()){ note.classList.add('on'); note.textContent='✓ Saved for this session'; }
+  else { note.classList.remove('on'); note.textContent='Your response saves automatically as you type'; }
+  renderLights();
+  renderTabs();
+}
+
+/* ───────── SUMMARY ───────── */
+function openSummary(){
+  persistCurrent();
+  renderSummary();
+  showView('summary');
+}
+
+function backToScenario(){
+  showView('scenario');
+  renderScenarioView();
+}
+
+function renderSummary(){
+  const role = roleById(state.roleId);
+  const r = resp();
+  const dateStr = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const name = state.name || "Unnamed Student";
+
+  const rows = [
+    {q:"Scenario 1 — "+SCEN_Q, a:r.s1},
+    {q:"Scenario 2 — "+SCEN_Q, a:r.s2},
+    {q:"Role Check-In — "+CHECKIN_Q, a:r.ci}
+  ];
+
+  document.getElementById('summary-doc').innerHTML = `
+    <div class="doc-head">
+      <div>
+        <div class="t">Response Summary</div>
+        <div class="sub"><b>${escapeHtml(name)}</b> &nbsp;·&nbsp; ${role.name} &nbsp;·&nbsp; ${dateStr}</div>
+      </div>
+      <div class="ball"></div>
+    </div>
+    ${rows.map(row=>`
+      <div class="qa">
+        <div class="q">${escapeHtml(row.q)}</div>
+        <div class="a ${row.a.trim()?'':'empty'}">${row.a.trim()?escapeHtml(row.a):'No response entered yet.'}</div>
+      </div>
+    `).join('')}
+  `;
+}
+
+function downloadText(){
+  const role = roleById(state.roleId);
+  const r = resp();
+  const dateStr = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const name = state.name || "Unnamed Student";
+  const lines = [
+    "RESPONSE SUMMARY",
+    "================",
+    "Name: "+name,
+    "Role: "+role.name,
+    "Date: "+dateStr,
+    "",
+    "SCENARIO 1",
+    SCEN_Q,
+    "",
+    (r.s1.trim()||"[No response entered]"),
+    "",
+    "----------------------------------------",
+    "",
+    "SCENARIO 2",
+    SCEN_Q,
+    "",
+    (r.s2.trim()||"[No response entered]"),
+    "",
+    "----------------------------------------",
+    "",
+    "ROLE CHECK-IN",
+    CHECKIN_Q,
+    "",
+    (r.ci.trim()||"[No response entered]"),
+    ""
+  ];
+  const blob = new Blob([lines.join("\n")],{type:"text/plain"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const safe = (name.replace(/[^a-z0-9]+/gi,'_')||"student");
+  a.href=url; a.download=`leadership_summary_${safe}_${role.id}.txt`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+/* ───────── NAV / UTIL ───────── */
+function showView(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  window.scrollTo(0,0);
+}
+function goLanding(){
+  persistCurrent();
+  document.getElementById('crumbs').textContent="Board Leadership Scenarios";
+  showView('landing');
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+/* ───────── INIT ───────── */
+renderRoleGrid();
+</script>
+</body>
+</html>
