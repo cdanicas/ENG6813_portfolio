@@ -609,11 +609,57 @@
     return Number.isFinite(n) && n > 0 ? n : fallback;
   }
 
+  const MONTHS = ['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'];
+
+  // Parses a free-text trip-dates field (e.g. "March 3-5") into a night count.
+  // Room nights = rooms x nights, so this has to be right for the room block math to make sense.
+  function parseNights(tripDates) {
+    const s = (tripDates || '').toLowerCase();
+
+    let m = s.match(/(\d+)\s*night/);
+    if (m) return Math.max(1, parseInt(m[1], 10));
+
+    // "March 3-5", "March 3 to 5", "Mar 3–5"
+    m = s.match(/([a-z]{3,})\.?\s*(\d{1,2})\s*(?:-|–|to)\s*(\d{1,2})/);
+    if (m && parseInt(m[3], 10) > parseInt(m[2], 10)) {
+      return parseInt(m[3], 10) - parseInt(m[2], 10);
+    }
+
+    // "3/3-3/5" or "3/3 - 3/5"
+    m = s.match(/(\d{1,2})\/(\d{1,2})\s*(?:-|–|to)\s*(\d{1,2})\/(\d{1,2})/);
+    if (m) {
+      const d1 = new Date(2001, parseInt(m[1], 10) - 1, parseInt(m[2], 10));
+      const d2 = new Date(2001, parseInt(m[3], 10) - 1, parseInt(m[4], 10));
+      const diff = Math.round((d2 - d1) / 86400000);
+      if (diff > 0) return diff;
+    }
+
+    // "March 3 - April 2" (different months, same pattern as above but months differ)
+    m = s.match(/([a-z]{3,})\.?\s*(\d{1,2})\s*(?:-|–|to)\s*([a-z]{3,})\.?\s*(\d{1,2})/);
+    if (m) {
+      const mo1 = MONTHS.indexOf(m[1].slice(0, 3));
+      const mo2 = MONTHS.indexOf(m[3].slice(0, 3));
+      if (mo1 !== -1 && mo2 !== -1) {
+        const d1 = new Date(2001, mo1, parseInt(m[2], 10));
+        const d2 = new Date(2001, mo2, parseInt(m[4], 10));
+        const diff = Math.round((d2 - d1) / 86400000);
+        if (diff > 0) return diff;
+      }
+    }
+
+    return 3; // fallback assumption when the format can't be parsed
+  }
+
   // ---------- deterministic proposal generation ----------
 
   function buildProposals(rfp) {
     const roomNights = toInt(rfp.roomNights, 30);
-    const peakRooms = Math.max(5, Math.round(roomNights / 3));
+    const nights = parseNights(rfp.tripDates);
+    const peakRooms = Math.max(1, Math.round(roomNights / nights));
+
+    // Bigger room-night commitments buy more negotiating leverage, same as a real hotel
+    // giving a group booking more rooms a bigger pool of concessions to work with.
+    const volumeBonus = Math.min(4, Math.floor(Math.max(0, roomNights - 30) / 50));
 
     return HOTEL_SLOTS.map(slot => {
       const amenities = [
@@ -630,7 +676,7 @@
         amenities: amenities,
         parkingRate: slot.parkingRate,
         resortFee: slot.resortFee,
-        roomBlockSize: peakRooms + ' rooms peak night',
+        roomBlockSize: peakRooms + ' rooms/night × ' + nights + (nights === 1 ? ' night' : ' nights') + ' ≈ ' + roomNights + ' room nights',
         attritionClause: slot.attritionPct + '% of room block by cutoff',
         cutoffDate: slot.cutoffDate,
         cancellationPolicy: slot.cancellationPolicy,
@@ -639,7 +685,7 @@
           : 'Not applicable',
         startingConcessions: slot.startingConcessions,
         flexibility: slot.flexibility,
-        budget: slot.budget,
+        budget: slot.budget + volumeBonus,
         fbDiscountPct: slot.fbBase
       };
     });
