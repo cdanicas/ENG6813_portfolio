@@ -524,7 +524,7 @@
       description: 'Full-service convention hotel two blocks from the capitol steps, built for groups who want everything walkable.',
       rate: 259, proximityToCapitol: '2 blocks (5 min walk)', parkingRate: '$32/night valet',
       resortFee: '$24/night facility fee', attritionPct: 85, cutoffDate: '30 days prior to arrival',
-      cancellationPolicy: 'Non-refundable within 14 days of arrival', fbBase: 0,
+      cancellationPolicy: 'Non-refundable within 14 days of arrival', fbPerPerson: 175,
       amenitiesAv: 'Full AV production support', amenitiesNoAv: 'Quiet, low-traffic meeting floors',
       amenities: ['Rooftop lounge', '24-hr business center', 'Valet parking'],
       startingConcessions: [
@@ -537,7 +537,7 @@
       description: 'A dependable business hotel a ten-minute walk from the capitol — good bones without the premium price tag.',
       rate: 189, proximityToCapitol: '0.6 miles (10 min walk)', parkingRate: '$18/night self-park',
       resortFee: '$12/night facility fee', attritionPct: 75, cutoffDate: '30 days prior to arrival',
-      cancellationPolicy: 'Full refund up to 7 days prior to arrival', fbBase: 15,
+      cancellationPolicy: 'Full refund up to 7 days prior to arrival', fbPerPerson: 120,
       amenitiesAv: 'In-house AV rental', amenitiesNoAv: 'Complimentary breakfast buffet',
       amenities: ['Fitness center', 'Self or valet parking'],
       startingConcessions: [
@@ -550,7 +550,7 @@
       description: 'A straightforward, friendly property outside downtown with a shuttle to the capitol — the value pick for groups watching every dollar.',
       rate: 129, proximityToCapitol: '3.1 miles (shuttle provided)', parkingRate: 'Free self-parking',
       resortFee: '$0 — no facility fee', attritionPct: 60, cutoffDate: '21 days prior to arrival',
-      cancellationPolicy: 'Full refund up to 3 days prior to arrival', fbBase: 20,
+      cancellationPolicy: 'Full refund up to 3 days prior to arrival', fbPerPerson: 75,
       amenitiesAv: 'Basic AV on request', amenitiesNoAv: 'Free hot breakfast',
       amenities: ['Free self-parking', 'Airport & capitol shuttle'],
       startingConcessions: [
@@ -656,6 +656,7 @@
     const roomNights = toInt(rfp.roomNights, 30);
     const nights = parseNights(rfp.tripDates);
     const peakRooms = Math.max(1, Math.round(roomNights / nights));
+    const attendees = toInt(rfp.attendees, 30);
 
     // Bigger room-night commitments buy more negotiating leverage, same as a real hotel
     // giving a group booking more rooms a bigger pool of concessions to work with.
@@ -681,12 +682,11 @@
         cutoffDate: slot.cutoffDate,
         cancellationPolicy: slot.cancellationPolicy,
         fbMinimum: rfp.eventSpace === 'Yes'
-          ? '$' + (slot.rate * 8) + ' per event day'
+          ? '$' + (slot.fbPerPerson * attendees).toLocaleString() + ' per event day (~$' + slot.fbPerPerson + '/person)'
           : 'Not applicable',
         startingConcessions: slot.startingConcessions,
         flexibility: slot.flexibility,
-        budget: slot.budget + volumeBonus,
-        fbDiscountPct: slot.fbBase
+        budget: slot.budget + volumeBonus
       };
     });
   }
